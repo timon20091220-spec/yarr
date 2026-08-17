@@ -1,0 +1,3 @@
+SPACE WAR GitHub Pages redeploy trigger
+Created: 2026-08-18 02:38 KST
+Purpose: trigger a fresh GitHub Pages deployment without changing game files.
