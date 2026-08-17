@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity Web Player | SPACE_WAR_1.0_UNITY_FIX32_2</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  
+    <!-- SPACE_ARCADE_V13 -->
+    <meta name="theme-color" content="#050b1c">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="SPACE ARCADE">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.webmanifest?v=13.1">
+    <link rel="apple-touch-icon" href="spacewar-icon-192.png">
+    <style>
+      *{box-sizing:border-box}
+      html,body{width:100%;min-width:100%;height:100%;min-height:100%;margin:0;padding:0;overflow:hidden;overscroll-behavior:none;background:#020612;color:#eef8ff;font-family:Arial,sans-serif}
+      #unity-container{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:100svh!important;margin:0!important;padding:0!important;transform:none!important;touch-action:none;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease;background:#020612}
+      #unity-canvas{display:block;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;transform:none!important;touch-action:none;-webkit-user-select:none;user-select:none}
+      body.spacewar-open #unity-container{opacity:1;visibility:visible;pointer-events:auto}
+      #space-arcade-launcher{position:fixed;inset:0;z-index:999999;display:block;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:0;background:radial-gradient(circle at 50% 18%,#102955 0,#071127 34%,#020612 72%);transition:opacity .22s ease}
+      body.spacewar-open #space-arcade-launcher{opacity:0;pointer-events:none}
+      .arcade-shell{width:min(920px,100%);min-height:calc(var(--sw-vh, 1vh) * 100);min-height:100dvh;min-height:100svh;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(22px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));display:flex;flex-direction:column;justify-content:center;text-align:center}
+      .arcade-kicker{font-size:12px;letter-spacing:4px;color:#67d8ff;margin-bottom:8px}.arcade-title{font-size:clamp(32px,8vw,68px);line-height:1.02;font-weight:900;letter-spacing:2px;margin:0}.arcade-sub{font-size:15px;color:#8faaca;margin:10px 0 18px}
+      #pwa-install-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:0 auto 18px;padding:9px 13px;border:1px solid rgba(86,214,255,.22);border-radius:16px;background:rgba(7,24,51,.64);max-width:650px;width:100%}
+      #pwa-install-row.hidden{display:none}.pwa-copy{font-size:12px;color:#9cb6d2;line-height:1.4}.pwa-install-btn{border:1px solid rgba(83,222,255,.72);background:linear-gradient(135deg,#123e74,#0a2855);color:#effcff;border-radius:999px;padding:10px 17px;font-weight:800;letter-spacing:.5px;cursor:pointer;-webkit-tap-highlight-color:transparent}.pwa-install-btn:disabled{opacity:.45;cursor:default}
+      #ios-landscape-hint{display:none;position:fixed;inset:0;z-index:1000001;align-items:center;justify-content:center;padding:28px;background:rgba(2,6,18,.86);pointer-events:none;text-align:center}.ios-landscape-box{max-width:420px;padding:20px 24px;border:1px solid rgba(83,222,255,.68);border-radius:20px;background:rgba(7,24,51,.95);box-shadow:0 18px 70px rgba(0,0,0,.48);font-size:17px;font-weight:900;line-height:1.55}.ios-landscape-sub{display:block;margin-top:7px;color:#9cb6d2;font-size:12px;font-weight:600}body.spacewar-open.ios-portrait-game #ios-landscape-hint{display:flex}
+      #pwa-toast{position:fixed;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translate(-50%,24px);z-index:10000;min-width:min(420px,calc(100vw - 32px));max-width:520px;padding:16px 20px;border:1px solid rgba(80,226,255,.72);border-radius:18px;background:rgba(4,18,42,.97);box-shadow:0 16px 60px rgba(0,0,0,.5),0 0 28px rgba(51,205,255,.12);color:#f4fbff;font-size:14px;font-weight:800;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}#pwa-toast.show{opacity:1;transform:translate(-50%,0)}
+      .game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;width:100%}
+      .game-card{position:relative;width:100%;min-width:0;min-height:220px;border:1px solid rgba(92,211,255,.34);border-radius:24px;padding:24px;text-align:left;color:#eef8ff;background:linear-gradient(145deg,rgba(20,65,118,.54),rgba(6,17,43,.88));box-shadow:0 18px 60px rgba(0,0,0,.28),inset 0 0 34px rgba(58,181,255,.05);cursor:pointer;overflow:hidden;-webkit-tap-highlight-color:transparent}
+      .game-card:active{transform:scale(.985)}.game-card[disabled]{cursor:default;opacity:.46}.game-card[disabled]:active{transform:none}
+      .game-no{font-size:12px;letter-spacing:3px;color:#63d8ff}.game-name{font-size:32px;font-weight:900;margin-top:18px}.game-desc{font-size:14px;color:#a6b9d2;margin-top:9px;line-height:1.55;padding-bottom:34px}.game-action{position:absolute;left:24px;bottom:22px;font-size:13px;font-weight:800;letter-spacing:2px;color:#78e6ff}.kingdom{border-color:rgba(199,169,93,.28);background:linear-gradient(145deg,rgba(81,62,24,.42),rgba(17,15,13,.86))}.kingdom .game-no,.kingdom .game-action{color:#dac17e}
+      #arcade-ready{min-height:18px;margin-top:16px;font-size:12px;color:#7791ad}
+      @media(max-width:720px){
+        .arcade-shell{width:100%;max-width:480px;justify-content:flex-start;padding-top:max(28px,env(safe-area-inset-top));padding-bottom:max(28px,env(safe-area-inset-bottom))}
+        .arcade-kicker{font-size:10px;letter-spacing:3px}.arcade-title{font-size:clamp(34px,12vw,52px)}.arcade-sub{font-size:13px;margin:8px 0 14px}
+        .game-grid{grid-template-columns:1fr;gap:12px}.game-card{min-height:148px;padding:18px 20px;border-radius:20px}.game-name{font-size:27px;margin-top:9px}.game-desc{font-size:13px;margin-top:6px;max-width:320px;padding-bottom:28px}.game-action{left:20px;bottom:16px}
+        #pwa-install-row{margin-bottom:12px;padding:8px 10px}.pwa-copy{max-width:250px;text-align:left}.pwa-install-btn{padding:9px 15px}
+      }
+      @media(max-width:380px){.arcade-shell{padding-left:12px;padding-right:12px}.arcade-title{font-size:32px}.game-card{min-height:140px;padding:16px}.game-name{font-size:24px}.game-action{left:16px}}
+      @media(max-height:680px) and (orientation:landscape){.arcade-shell{justify-content:flex-start;padding-top:14px;padding-bottom:14px}.arcade-kicker{display:none}.arcade-title{font-size:32px}.arcade-sub{margin:5px 0 10px}.game-card{min-height:142px;padding:16px}.game-name{font-size:24px;margin-top:7px}.game-desc{font-size:12px;margin-top:5px}.game-action{bottom:14px}#pwa-install-row{margin-bottom:9px;padding:7px 10px}#arcade-ready{margin-top:8px}}
+    </style>
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-logo-title-footer"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">SPACE_WAR_1.0_UNITY_FIX32_2</div>
+      </div>
+    </div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+
+      // Shows a temporary message banner/ribbon for a few seconds, or
+      // a permanent error message on top of the canvas if type=='error'.
+      // If type=='warning', a yellow highlight color is used.
+      // Modify or remove this function to customize the visually presented
+      // way that non-critical warnings and error messages are presented to the
+      // user.
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/GitHubPages_20260817_183559.loader.js";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/GitHubPages_20260817_183559.data.unityweb",
+        frameworkUrl: buildUrl + "/GitHubPages_20260817_183559.framework.js.unityweb",
+        codeUrl: buildUrl + "/GitHubPages_20260817_183559.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "SPACE_WAR_1.0_UNITY_FIX32_2",
+        productVersion: "1.0",
+        showBanner: unityShowBanner,
+        // errorHandler: function(err, url, line) {
+        //    alert("error " + err + " occurred at line " + line);
+        //    // Return 'true' if you handled this error and don't want Unity
+        //    // to process it further, 'false' otherwise.
+        //    return true;
+        // },
+      };
+
+      // By default, Unity keeps WebGL canvas render target size matched with
+      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
+      // Set this to false if you want to decouple this synchronization from
+      // happening inside the engine, and you would instead like to size up
+      // the canvas DOM size and WebGL render target sizes yourself.
+      // config.matchWebGLToCanvasSize = false;
+
+      // If you would like all file writes inside Unity Application.persistentDataPath
+      // directory to automatically persist so that the contents are remembered when
+      // the user revisits the site the next time, uncomment the following line:
+      // config.autoSyncPersistentDataPath = true;
+      // This autosyncing is currently not the default behavior to avoid regressing
+      // existing user projects that might rely on the earlier manual
+      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
+      // expected to change.
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        document.querySelector("#unity-container").className = "unity-mobile";
+        canvas.className = "unity-mobile";
+
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+
+
+      } else {
+        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+
+      document.querySelector("#unity-loading-bar").style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
+              }).then((unityInstance) => {
+        window.__spaceWarUnityInstance = unityInstance;
+        if (window.__spaceArcadeUnityReady) window.__spaceArcadeUnityReady();
+                document.querySelector("#unity-loading-bar").style.display = "none";
+                document.querySelector("#unity-fullscreen-button").onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
+
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+
+      document.body.appendChild(script);
+
+    </script>
+  
+  <div id="space-arcade-launcher">
+    <main class="arcade-shell">
+      <div class="arcade-kicker">SELECT YOUR WORLD</div>
+      <h1 class="arcade-title">SPACE ARCADE</h1>
+      <div class="arcade-sub">플레이할 게임을 선택하세요.</div>
+      <div id="pwa-install-row">
+        <div id="pwa-install-copy" class="pwa-copy">앱으로 설치하면 주소창 없이 전체화면으로 실행되고 게임 화면의 가로 전환이 더 안정적입니다.</div>
+        <button id="install-space-arcade" class="pwa-install-btn" type="button">PWA 앱 설치</button>
+      </div>
+      <div class="game-grid">
+        <button id="open-space-war" class="game-card" type="button">
+          <div class="game-no">GAME 01</div><div class="game-name">SPACE WAR</div>
+          <div class="game-desc">우주 생존 전투 · 계정 로그인 후 시작</div><div id="space-war-action" class="game-action">PLAY</div>
+        </button>
+        <button class="game-card kingdom" type="button" disabled>
+          <div class="game-no">GAME 02</div><div class="game-name">미정</div>
+          <div class="game-desc">두 번째 게임은 아직 정해지지 않았습니다.</div><div class="game-action">미정</div>
+        </button>
+      </div>
+      <div id="arcade-ready">게임을 선택하면 준비되는 즉시 자동으로 시작됩니다. · V13.1</div>
+    </main>
+    <div id="pwa-toast" role="status" aria-live="polite"></div>
+    <div id="ios-landscape-hint" aria-hidden="true"><div class="ios-landscape-box">📱 iPhone을 가로로 돌려주세요<span class="ios-landscape-sub">설치된 PWA에서는 가로 실행을 우선 요청하고, Safari 링크에서는 회전 즉시 화면을 다시 맞춥니다.</span></div></div>
+  </div>
+  <script>
+    window.__spaceArcadeDeferredInstallPrompt=null;
+    window.__spaceArcadeToastTimer=null;
+    window.__spaceArcadeShowToast=function(message,duration){
+      var t=document.getElementById('pwa-toast');if(!t)return;t.textContent=message;t.classList.add('show');
+      if(window.__spaceArcadeToastTimer)clearTimeout(window.__spaceArcadeToastTimer);
+      window.__spaceArcadeToastTimer=setTimeout(function(){t.classList.remove('show');},duration||4200);
+    };
+    window.__spaceArcadeIsInstalled=function(){
+      try{return window.navigator.standalone===true||window.matchMedia('(display-mode: fullscreen)').matches||window.matchMedia('(display-mode: standalone)').matches;}catch(e){return false;}
+    };
+    window.__spaceArcadeIsIOS=function(){
+      try{return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}catch(e){return false;}
+    };
+    window.__spaceArcadeRefreshInstallUI=function(){
+      var row=document.getElementById('pwa-install-row'),btn=document.getElementById('install-space-arcade'),copy=document.getElementById('pwa-install-copy');
+      if(!row||!btn)return;
+      if(window.__spaceArcadeIsInstalled()){row.classList.add('hidden');return;}
+      row.classList.remove('hidden');
+      btn.disabled=false;
+      if(window.__spaceArcadeDeferredInstallPrompt){
+        btn.textContent='PWA 앱 설치';
+        if(copy)copy.textContent='SPACE ARCADE를 기기에 설치해 전체화면으로 실행할 수 있습니다.';
+      }else if(window.__spaceArcadeIsIOS()){
+        btn.textContent='iOS 설치 방법';
+        if(copy)copy.textContent='iPhone/iPad에서도 홈 화면에 추가해 PWA로 실행할 수 있습니다.';
+      }else{
+        btn.textContent='PWA 설치';
+        if(copy)copy.textContent='설치 항목이 보이지 않으면 버튼을 눌러 브라우저별 설치 방법을 확인하세요.';
+      }
+    };
+    window.addEventListener('beforeinstallprompt',function(e){
+      try{e.preventDefault();window.__spaceArcadeDeferredInstallPrompt=e;window.__spaceArcadeRefreshInstallUI();}catch(x){}
+    });
+    window.addEventListener('appinstalled',function(){
+      window.__spaceArcadeDeferredInstallPrompt=null;
+      window.__spaceArcadeRefreshInstallUI();
+      window.__spaceArcadeApplyInstalledOrientation();
+    });
+    window.__spaceArcadeInstall=function(){
+      var p=window.__spaceArcadeDeferredInstallPrompt;
+      if(!p){
+        if(window.__spaceArcadeIsIOS())window.__spaceArcadeShowToast('Safari의 공유 버튼을 누른 뒤 ‘홈 화면에 추가’를 선택하세요.',5200);
+        else window.__spaceArcadeShowToast('브라우저 메뉴의 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 선택하세요.',4800);
+        return;
+      }
+      window.__spaceArcadeDeferredInstallPrompt=null;
+      try{
+        var result=p.prompt();
+        if(result&&typeof result.catch==='function')result.catch(function(){});
+        if(p.userChoice&&typeof p.userChoice.then==='function')p.userChoice.then(function(choice){
+          if(choice&&choice.outcome==='accepted'){var row=document.getElementById('pwa-install-row');if(row)row.classList.add('hidden');}
+          window.__spaceArcadeRefreshInstallUI();
+        }).catch(function(){});
+      }catch(e){window.__spaceArcadeRefreshInstallUI();}
+    };
+    // V13: only installed PWA mode requests orientation locking.
+    // Normal browser links never call the Screen Orientation API, avoiding
+    // the old Permissions check failed path.
+    window.__spaceArcadeLockInstalledLandscape=function(){
+      if(!window.__spaceArcadeIsInstalled())return;
+      try{
+        if(screen.orientation&&screen.orientation.lock){var p=screen.orientation.lock('landscape');if(p&&typeof p.catch==='function')p.catch(function(){});}
+      }catch(e){}
+    };
+    window.__spaceArcadeApplyInstalledOrientation=function(){
+      if(!window.__spaceArcadeIsInstalled())return;
+      window.__spaceWarWantsLandscape=true;
+      window.__spaceArcadeLockInstalledLandscape();
+      setTimeout(window.__spaceArcadeLockInstalledLandscape,120);
+      setTimeout(window.__spaceArcadeLockInstalledLandscape,500);
+      setTimeout(window.__spaceArcadeLockInstalledLandscape,1200);
+    };
+    window.__spaceArcadeSyncIOSOrientation=function(){
+      try{
+        var portrait=window.__spaceArcadeIsIOS()&&document.body.classList.contains('spacewar-open')&&window.innerHeight>window.innerWidth;
+        document.body.classList.toggle('ios-portrait-game',portrait);
+        if(!portrait&&document.body.classList.contains('spacewar-open'))window.dispatchEvent(new Event('resize'));
+      }catch(e){}
+    };
+    window.__spaceArcadePendingOpen=false;
+    window.__spaceArcadeUnityReady=function(){
+      var b=document.getElementById('open-space-war'),a=document.getElementById('space-war-action'),s=document.getElementById('arcade-ready');
+      if(b)b.disabled=false;if(a)a.textContent='PLAY';
+      if(s)s.textContent='준비 완료';
+      if(window.__spaceArcadePendingOpen){
+        window.__spaceArcadePendingOpen=false;
+        window.__spaceArcadeOpenSpaceWar();
+      }
+    };
+    window.__spaceArcadeOpenSpaceWar=function(){
+      var u=window.__spaceWarUnityInstance;
+      var a=document.getElementById('space-war-action'),s=document.getElementById('arcade-ready');
+      if(!u){
+        window.__spaceArcadePendingOpen=true;
+        if(a)a.textContent='LOADING';
+        if(s)s.textContent='SPACE WAR 불러오는 중... 준비되는 즉시 자동으로 시작합니다.';
+        return;
+      }
+      window.__spaceArcadeApplyInstalledOrientation();
+      document.body.classList.add('spacewar-open');
+      window.__spaceArcadeSyncIOSOrientation();
+      try{u.SendMessage('SpaceWarGame','OpenFromArcadeLauncher');}catch(e){}
+      try{window.dispatchEvent(new Event('resize'));}catch(e){}
+    };
+    document.addEventListener('DOMContentLoaded',function(){
+      var b=document.getElementById('open-space-war'),ib=document.getElementById('install-space-arcade');
+      // Mobile browser bars change the visual viewport after load. Keep the launcher
+      // sized to the actually visible area so the first screen does not jump/crop.
+      var syncViewport=function(){
+        try{document.documentElement.style.setProperty('--sw-vh',((window.visualViewport?window.visualViewport.height:window.innerHeight)*0.01)+'px');}catch(e){}
+      };
+      syncViewport();
+      window.addEventListener('resize',function(){syncViewport();window.__spaceArcadeSyncIOSOrientation();},{passive:true});
+      if(window.visualViewport)window.visualViewport.addEventListener('resize',function(){syncViewport();window.__spaceArcadeSyncIOSOrientation();},{passive:true});
+      if(b)b.addEventListener('pointerdown',function(e){e.preventDefault();window.__spaceArcadeOpenSpaceWar();},{passive:false});
+      if(ib)ib.addEventListener('click',function(){window.__spaceArcadeInstall();});
+      if(window.__spaceWarUnityInstance)window.__spaceArcadeUnityReady();
+      window.__spaceArcadeRefreshInstallUI();
+      window.__spaceArcadeApplyInstalledOrientation();
+      document.addEventListener('visibilitychange',function(){if(!document.hidden)window.__spaceArcadeApplyInstalledOrientation();});
+      window.addEventListener('orientationchange',function(){window.__spaceArcadeApplyInstalledOrientation();setTimeout(window.__spaceArcadeSyncIOSOrientation,80);setTimeout(window.__spaceArcadeSyncIOSOrientation,350);},{passive:true});
+      window.addEventListener('pointerdown',function(){if(window.__spaceArcadeIsInstalled())window.__spaceArcadeLockInstalledLandscape();},{passive:true});
+            // V13: PWA registration is restored and installed mode is forced back to landscape.
+      if('serviceWorker' in navigator){
+        navigator.serviceWorker.register('./spacewar-sw.js',{scope:'./',updateViaCache:'none'}).then(function(reg){try{reg.update();}catch(e){}}).catch(function(){});
+      }
+    });
+  </script>
+</body>
+</html>
