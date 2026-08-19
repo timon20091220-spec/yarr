@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "314491732348",
+    "project_id": "space-war-9e240",
+    "storage_bucket": "space-war-9e240.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314491732348:android:cba1617478525a85b464f9",
+        "android_client_info": {
+          "package_name": "com.spacewar.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314491732348-5lvko2f4gtnlloii7snmfjmna8jhvr7c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spacewar.game",
+            "certificate_hash": "31258e211769cb75e47fd3e4e441f7b2bc2bfa6a"
+          }
+        },
+        {
+          "client_id": "314491732348-c313feacg846oh04m88b658libr59esb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB18ASQ6TfgAgS7jQigwHq4I03tBSV2_DU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "314491732348-c313feacg846oh04m88b658libr59esb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "314491732348-f1h0obi9rooggntt6f2r2vr8a47p4im8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.spacewar.game"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
