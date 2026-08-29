@@ -1,0 +1,9 @@
+{
+  "files": {
+    "Build/spacewar.data.unityweb": {
+      "size": 31939886,
+      "contentType": "application/octet-stream",
+      "parts": ["Build/spacewar.data.unityweb.part000", "Build/spacewar.data.unityweb.part001"]
+    }
+  }
+}
