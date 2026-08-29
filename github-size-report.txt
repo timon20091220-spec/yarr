@@ -1,0 +1,6 @@
+SPACE WAR GitHub Pages V96 25MB Upload Report
+Generated: 2026-08-30 02:06:39
+Loader: client-side split fetch (NO service worker)
+Largest final file: Build/spacewar.data.unityweb.part000 / 20.00 MB
+
+PASS: 모든 업로드 파일이 24MB 이하입니다.
