@@ -1,0 +1,9 @@
+SPACE WAR GitHub Pages 25MB Upload Report
+Generated: 2026-08-30 01:26:32
+Safe chunk size: 20 MB
+Split large files: 1
+Largest final file: Build/spacewar.data.unityweb.part000 / 20.00 MB
+
+SPLIT  Build/spacewar.data.unityweb  =>  2 parts  (original 30.46 MB)
+
+PASS: 모든 업로드 파일이 24MB 이하입니다.
